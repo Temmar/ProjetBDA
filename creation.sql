@@ -30,13 +30,12 @@ create or replace type t_descripteurVedette
 /
  
 create or replace type t_relationV as object (
-    NomRelation varchar(50), -- generalise , spécialise, autres ...
+    NomRelation varchar(50), -- generalise ou spécialise
     Description varchar(150),
     Descrip ref t_descripteurVedette
 )
 /
--- check (value in ('S', 'A'))
--- constraint chk_nomR check(NomRelation in ('S', 'A'))
+-- Est soit un synonyme ou un antonyme
 create or replace type t_relationA as object (
     NomRelation varchar(50) ,
     Description varchar(150),
@@ -83,5 +82,5 @@ NESTED TABLE child store as desc_spec_gen ,
 NESTED TABLE associer store as desc_syno_anto;
  
 ALTER TABLE desc_syno_anto ADD CONSTRAINT
-ch_ds CHECK (NomRelation in ('S', 'A'))
+ch_ds CHECK (NomRelation LIKE 'S%'OR NomRelation LIKE 'A%')
 /
