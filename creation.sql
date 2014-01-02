@@ -23,7 +23,7 @@ create or replace type t_concept
 -- type descripteur
 create or replace type t_descripteur as object (
     libelle     varchar(50),
-    description     varchar(150)
+    description     varchar(300)
 ) not final
 /
 create or replace type t_descripteurVedette
@@ -31,14 +31,14 @@ create or replace type t_descripteurVedette
  
 create or replace type t_relationV as object (
     NomRelation varchar(50), -- generalise ou spécialise
-    Description varchar(150),
+    Description varchar(300),
     Descrip ref t_descripteurVedette
 )
 /
 -- Est soit un synonyme ou un antonyme
 create or replace type t_relationA as object (
     NomRelation varchar(50) ,
-    Description varchar(150),
+    Description varchar(300),
     Descrip ref t_descripteur
 )
 /
@@ -60,7 +60,7 @@ create or replace type t_descripteurVedette under t_descripteur(
 -- type concept
 create or replace type t_concept as object(
     libelle     varchar(50),
-    description varchar(150),
+    description varchar(300),
     decripteurVedette ref t_descripteurVedette
 )
 /
