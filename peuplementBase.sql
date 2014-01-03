@@ -149,16 +149,3 @@ insert into DescripteurVedette values ( 'Artiste',
                                           )
                                         )                                     
                                   );
-                                  
-insert into DescripteurAssocie values (
-  'Cinémathèque',
-  'Organisme d archivage et/ou de diffusion de documents cinématographiques'
-); 
-
-insert into DescripteurAssocie values (
-  'Industrie cinématographique',
-  'Ensemble des activités d aspect commercial, relatives au monde du cinéma et qui sont généralement basées sur la production, la promotion et la diffusion des produits cinématographiques.'
-);                                        
-
-                             
-                                     
