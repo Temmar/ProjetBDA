@@ -3,13 +3,6 @@ host cls;
 drop table DescripteurAssocie;
 drop table Concept;
 drop table DescripteurVedette;
-drop type t_descripteurVedette force;
-drop type listeDescripteurA force;
-drop type t_relationA force;
-drop type t_relationV force;
-drop type listeDescripteurV force;
-drop type t_descripteur force;
-drop type t_concept force;
  
 -----------------------------------
 -- Creation de la base de donnée --
@@ -26,6 +19,7 @@ create or replace type t_descripteur as object (
     description     varchar(300)
 ) not final
 /
+
 create or replace type t_descripteurVedette
 /
  
@@ -43,10 +37,10 @@ create or replace type t_relationA as object (
 )
 /
  
-create or replace type listeDescripteurV is table of t_relationV
+create or replace type listeDescripteurV as table of t_relationV
 /
  
-create or replace type listeDescripteurA is table of t_relationA
+create or replace type listeDescripteurA as table of t_relationA
 /
  
 -- type descripteur vedette
@@ -79,8 +73,8 @@ create table DescripteurVedette of t_descripteurVedette (
     primary key (libelle)
 )
 NESTED TABLE child store as desc_spec_gen ,
-NESTED TABLE associer store as desc_syno_anto;
+NESTED TABLE associes store as desc_syno_anto;
  
-ALTER TABLE desc_syno_anto ADD CONSTRAINT
-ch_ds CHECK (NomRelation LIKE 'S%'OR NomRelation LIKE 'A%')
+ALTER TABLE desc_syno_anto ADD CONSTRAINT ch_ds CHECK (NomRelation LIKE 'S%'OR NomRelation LIKE 'A%')
 /
+
