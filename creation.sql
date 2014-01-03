@@ -1,6 +1,5 @@
 prompt *****Delete Existing Tables and Types*****
 host cls;
-drop table DescripteurAssocie;
 drop table Concept;
 drop table DescripteurVedette;
  
@@ -24,7 +23,7 @@ create or replace type t_descripteurVedette
 /
  
 create or replace type t_relationV as object (
-    NomRelation varchar(50), -- generalise ou spécialise
+    NomRelation varchar(50), -- généralise ou spécialise
     Description varchar(300),
     Descrip ref t_descripteurVedette
 )
@@ -44,7 +43,8 @@ create or replace type listeDescripteurA as table of t_relationA
 /
  
 -- type descripteur vedette
-create or replace type t_descripteurVedette under t_descripteur(
+create or replace type t_descripteurVedette under t_descripteur
+(
     concept ref t_concept,
     child listeDescripteurV,
     associes listeDescripteurA
@@ -52,7 +52,8 @@ create or replace type t_descripteurVedette under t_descripteur(
 /
  
 -- type concept
-create or replace type t_concept as object(
+create or replace type t_concept as object
+(
     libelle     varchar(50),
     description varchar(300),
     decripteurVedette ref t_descripteurVedette
@@ -61,15 +62,13 @@ create or replace type t_concept as object(
  
 prompt *****Create Tables*****
 -- creation des tables
-create table Concept of t_concept (
+create table Concept of t_concept 
+(
     primary key (libelle)  
 );
- 
-create table DescripteurAssocie of t_descripteur (
-    primary key (libelle)
-);
- 
-create table DescripteurVedette of t_descripteurVedette (
+
+create table DescripteurVedette of t_descripteurVedette 
+(
     primary key (libelle)
 )
 NESTED TABLE child store as desc_spec_gen ,
