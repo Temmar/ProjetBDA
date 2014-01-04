@@ -1,0 +1,289 @@
+host cls;
+--									   (libelle 	varchar(50))
+prompt *****Insertion dans la table DescripteurAssocie *****
+--synonymes du mot acteur
+insert into DescripteurAssocie values ('personnage');
+insert into DescripteurAssocie values ('comedien');
+insert into DescripteurAssocie values ('interprete');
+--synonymes du mot cineaste
+insert into DescripteurAssocie values ('auteur-realisateur-monteur');
+--synonymes du mot scenariste
+insert into DescripteurAssocie values ('ecrivain');
+insert into DescripteurAssocie values ('redacteur');
+--synonymes du mot realisateur
+insert into DescripteurAssocie values ('metteur en scene');
+insert into DescripteurAssocie values ('fabricant');
+--synonymes du mot monteur
+insert into DescripteurAssocie values ('assembleur');
+--synonymes du mot technicien
+insert into DescripteurAssocie values ('specialiste');
+--synonymes du mot cameraman
+insert into DescripteurAssocie values ('filmeur');
+insert into DescripteurAssocie values ('cadreur');
+insert into DescripteurAssocie values ('operateur de prise de vue');
+--synonymes du mot perchman
+insert into DescripteurAssocie values ('perchiste');
+insert into DescripteurAssocie values ('assistant son');
+--synonymes du mot preparateur
+--spec
+insert into DescripteurAssocie values ('coiffeur');
+--spec
+insert into DescripteurAssocie values ('maquilleur');
+--spec
+insert into DescripteurAssocie values ('decorateur');
+--synonymes du mot responsable
+insert into DescripteurAssocie values ('proprietaire');
+insert into DescripteurAssocie values ('dirigeant');
+--synonymes du mot producteur
+--spec
+insert into DescripteurAssocie values ('producteur executif');
+--spec
+insert into DescripteurAssocie values ('producteur delegue');
+insert into DescripteurAssocie values ('maître-d''œuvre');
+insert into DescripteurAssocie values ('maître-d''ouvrage');
+--synonymes du mot exploitant
+--spec
+insert into DescripteurAssocie values ('exploitant salarie');
+--spec
+insert into DescripteurAssocie values ('exploitant independant');
+--spec
+insert into DescripteurAssocie values ('exploitant benevoleur');
+
+
+--						   ( libelle 	varchar(50),
+--							 decripteurVedette ref t_descripteurVedette)
+prompt *****Insertion concept*****
+insert into concept values ('personne', null);
+	insert into concept values ('artiste', null);
+		insert into concept values ('acteur', null);
+		insert into concept values ('cineaste', null);
+		insert into concept values ('auteur', null);
+		insert into concept values ('realisateur', null);
+		insert into concept values ('monteur', null);
+
+	insert into concept values ('technicien', null);
+		insert into concept values ('cameraman', null);
+		insert into concept values ('perchman', null);
+		insert into concept values ('preparateur', null);
+		
+	insert into concept values ('responsable', null);
+		insert into concept values ('producteur', null);
+		insert into concept values ('distributeur', null);
+		insert into concept values ('exploitant', null);
+
+
+--									( libelle 	varchar(50),
+--								      description 	varchar(150)
+--									  concept ref t_concept,
+--									  child listeDescripteurV,
+--									  associer listeDescripteurA
+prompt *****Insertion des descripteurs vedettes *****
+insert into DescripteurVedette values ('personne',
+										'toute personne impliquee dans le cinema',
+										(select ref(c) from concept c where c.libelle = 'personne'),null,null);
+	insert into DescripteurVedette values ('artiste',
+										'personne qui exerce professionnellement un des beaux-arts',
+										(select ref(c) from concept c where c.libelle = 'artiste'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'personne'))),null);
+		insert into DescripteurVedette values ('acteur',
+										'artiste dont la profession est de jouer des rôles sur la scene du theâtre ou au cinema ',
+										(select ref(c) from concept c where c.libelle = 'acteur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'artiste'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'personnage')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'comedien')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'interprete'))));
+		insert into DescripteurVedette values ('cineaste',
+										'artiste qui fait la redaction, la realisation et le montage',
+										(select ref(c) from concept c where c.libelle = 'cineaste'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'artiste'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'auteur-realisateur-monteur'))));
+		insert into DescripteurVedette values ('scenariste',
+										'celui qui ecrit le scenario d''un film',
+										(select ref(c) from concept c where c.libelle = 'auteur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'cineaste'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'ecrivain')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'redacteur'))));
+		insert into DescripteurVedette values ('realisateur',
+										'personne qui dirige la fabrication d''une œuvre audiovisuelle',
+										(select ref(c) from concept c where c.libelle = 'realisateur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'cineaste'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'metteur en scene')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'fabricant'))));
+		insert into DescripteurVedette values ('monteur',
+										'assure l''assemblage des sequences et des plans d''un film',
+										(select ref(c) from concept c where c.libelle = 'monteur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'cineaste'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'assembleur'))));
+
+	insert into DescripteurVedette values ('technicien',
+										'charge de la partie technique',
+										(select ref(c) from concept c where c.libelle = 'technicien'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'personne'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'specialiste'))));
+		insert into DescripteurVedette values ('cameraman',
+										'celui qui manipule la camera',
+										(select ref(c) from concept c where c.libelle = 'cameraman'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'technicien'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'filmeur')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'cadreur')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'operateur de prise de vue'))));
+		insert into DescripteurVedette values ('perchman',
+										'exploite les micros et manipule la perche',
+										(select ref(c) from concept c where c.libelle = 'perchman'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'technicien'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'perchiste')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'assistant son'))));		
+		insert into DescripteurVedette values ('preparateur',
+										'technicien charge de preparer ce qui est necessaire pour le tournage',
+										(select ref(c) from concept c where c.libelle = 'preparateur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'technicien'))),
+										listeDescripteurA(t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'coiffeur')),
+										t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'maquilleur')),
+										t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'decorateur'))));
+		
+	insert into DescripteurVedette values ('responsable',
+										'Qui a la charge d''une fonction',
+										(select ref(c) from concept c where c.libelle = 'responsable'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'personne'))),
+										listeDescripteurA(t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'proprietaire')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'dirigeant'))));
+		insert into DescripteurVedette values ('producteur',
+										'la personne qui recherche des projets de films et se met en quête des moyens financiers pour les produire',
+										(select ref(c) from concept c where c.libelle = 'producteur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'responsable'))),listeDescripteurA( t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'producteur executif')),
+										t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'producteur delegue')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'maître-d''œuvre')),
+										t_relationA('S',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'maître-d''ouvrage'))));
+		insert into DescripteurVedette values ('distributeur',
+										'charge de la distribution de film',
+										(select ref(c) from concept c where c.libelle = 'distributeur'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'responsable'))),null);
+		insert into DescripteurVedette values ('exploitant',
+										'personne responsable de l''exploitation cinematographique dans des salles de cinema',
+										(select ref(c) from concept c where c.libelle = 'exploitant'),
+										listeDescripteurV(t_relationV('spec',null,(select ref(d) from descripteurvedette d 
+										where d.libelle = 'responsable'))),
+										listeDescripteurA(t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'exploitant salarie')),
+										t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'exploitant independant')),
+										t_relationA('gen',null,(select ref(d) from descripteurassocie d 
+										where d.libelle = 'exploitant benevoleur'))));
+-- les relations gen
+--personne
+update 	DescripteurVedette dv set spec_gen
+			=(listeDescripteurV(t_relationV('gen',null,(select ref(d) 
+			from descripteurvedette d where d.libelle = 'artiste'))))
+		where dv.libelle = 'personne';
+-- on a utilisé update ici parceque la nested table etait vide 		
+	--artiste
+	insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='artiste')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'acteur')));		
+	--artiste
+	insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='artiste')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'cineaste')));
+		--cineaste
+		insert into table (select dv.spec_gen from DescripteurVedette dv
+			where dv.libelle ='cineaste')
+			values (t_relationV('gen',null,
+			(select ref(d) from descripteurvedette d where d.libelle = 'scenariste')));
+		--cineaste
+		insert into table (select dv.spec_gen from DescripteurVedette dv
+			where dv.libelle ='cineaste')
+			values (t_relationV('gen',null,
+			(select ref(d) from descripteurvedette d where d.libelle = 'realisateur')));
+		--cineaste
+		insert into table (select dv.spec_gen from DescripteurVedette dv
+			where dv.libelle ='cineaste')
+			values (t_relationV('gen',null,
+			(select ref(d) from descripteurvedette d where d.libelle = 'monteur')));
+--personne		
+insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='personne')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'technicien')));		
+	--technicien
+	insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='technicien')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'cameraman')));
+	--technicien
+	insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='technicien')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'perchman')));
+	--technicien
+	insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='technicien')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'preparateur')));
+		
+--personne	
+insert into table (select dv.spec_gen from DescripteurVedette dv
+		where dv.libelle ='personne')
+		values (t_relationV('gen',null,
+		(select ref(d) from descripteurvedette d where d.libelle = 'responsable')));		
+	--responsable
+		insert into table (select dv.spec_gen from DescripteurVedette dv
+			where dv.libelle ='responsable')
+			values (t_relationV('gen',null,
+			(select ref(d) from descripteurvedette d where d.libelle = 'producteur')));
+	--responsable
+		insert into table (select dv.spec_gen from DescripteurVedette dv
+			where dv.libelle ='responsable')
+			values (t_relationV('gen',null,
+			(select ref(d) from descripteurvedette d where d.libelle = 'distributeur')));
+	--responsable
+		insert into table (select dv.spec_gen from DescripteurVedette dv
+			where dv.libelle ='responsable')
+			values (t_relationV('gen',null,
+			(select ref(d) from descripteurvedette d where d.libelle = 'exploitant')));
+			
+
+
+--insert into DescripteurVedette values ( 'film', 
+--										'pellicule utilisee en photographie et au cinema', 
+--										(select ref(c) from concept c where c.libelle = 'film'),null,null);
+
+										
